@@ -1,0 +1,183 @@
+// Tabelas principais
+table associado{
+  id int [pk, increment]
+  nome varchar
+  sobrenome varchar
+  data_nascimento date
+  estado_civil estado_civil
+  sexo sexo
+  naturalidade_uf uf
+  naturalidade_cidade varchar
+  numero_documento varchar
+  uf_documento uf
+  orgao_documento varchar
+  data_documento date
+  nome_mae varchar
+  nome_pai varchar
+  endereco_id int
+  email varchar
+  telefone varchar
+  situacao situacao_associado
+}
+
+table prestador{
+  id int [pk, increment]
+  nome varchar
+  sobrenome varchar
+  data_nascimento date
+  sexo sexo
+  numero_documento_profissional varchar
+  endereco_atendimento_id int
+  especialidade_id int
+  telefone varchar
+}
+
+table conveniado{
+  id int [pk, increment]
+  nome varchar
+  endereco_id int
+  telefone varchar
+}
+
+table plano{
+  id int [pk, increment]
+  nome varchar
+  codigo_ans varchar
+  categoria categoria_plano
+  tipo tipo_plano
+  odonto boolean
+  idade_min int
+  idade_max int
+  quantidade_consultas_ano int
+  quantidade_exames_ano int
+  valor_mensalidade double
+}
+
+table consulta{
+  id int [pk, increment]
+  associado_id int
+  disponibilidade_consulta_id int
+  situacao situacao_atendimento
+}
+
+table disponibilidade_consulta{
+  id int [pk, increment]
+  prestador_id int
+  hora_inicio datetime
+  hora_fim datetime
+}
+
+table exame{
+  id int [pk, increment]
+  associado_id int
+  disponibilidade_exame_id int
+  situacao situacao_atendimento
+}
+
+table disponibilidade_exame{
+  id int [pk, increment]
+  conveniado_id int
+  exame_id int
+  hora_inicio datetime
+  hora_fim datetime
+}
+
+table tipo_exame{
+  id int [pk, increment]
+  nome varchar
+}
+
+// Relacionamentos
+// n->n conveniado/exame
+// n->n conveniado/especialidade
+// n->n prestador/especialidade
+
+//Tabelas de suporte
+
+table endereco{
+  id int [pk, increment]
+  cep varchar
+  logradouro varchar
+  numero varchar
+  cidade varchar
+  uf uf
+  bairro varchar
+  complemento varchar
+}
+
+table especialidade{
+  id int [pk, increment]
+  nome varchar
+}
+
+
+
+// ENUMS
+enum estado_civil {
+  solteiro
+  casado
+  divorciado
+  viuvo
+  uniao_estavel
+}
+
+enum sexo{
+  masculino
+  feminino
+}
+
+enum situacao_associado{
+  ativo
+  suspenso
+  inativo
+}
+
+enum uf{
+  AC
+  AL
+  AP
+  AM
+  BA
+  CE
+  ES
+  GO
+  MA
+  MT
+  MS
+  MG
+  PA
+  PB
+  PR
+  PE
+  PI
+  RJ
+  RN
+  RS
+  RO
+  RR
+  SC
+  SP
+  SE
+  TO
+  DF
+}
+
+enum categoria_plano{
+  individual
+  empresarial
+}
+
+enum tipo_plano{
+  enfermaria
+  apartamento
+  vip
+}
+
+enum situacao_atendimento{
+  agendad
+  cancelado
+  em_andamento
+  finalizado
+}
+
+Ref: "especialidade"."id" < "prestador"."especialidade_id"
