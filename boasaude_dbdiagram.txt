@@ -1,5 +1,5 @@
 // Tabelas principais
-table associado{
+table saf.associado{
   id int [pk, increment]
   nome varchar
   sobrenome varchar
@@ -18,28 +18,29 @@ table associado{
   email varchar
   telefone varchar
   situacao situacao_associado
+  plano_id int
 }
 
-table prestador{
+table saf.prestador{
   id int [pk, increment]
   nome varchar
   sobrenome varchar
   data_nascimento date
   sexo sexo
   numero_documento_profissional varchar
-  endereco_atendimento_id int
   especialidade_id int
+  endereco_atendimento_id int
   telefone varchar
 }
 
-table conveniado{
+table saf.conveniado{
   id int [pk, increment]
   nome varchar
   endereco_id int
   telefone varchar
 }
 
-table plano{
+table saf.plano{
   id int [pk, increment]
   nome varchar
   codigo_ans varchar
@@ -53,48 +54,33 @@ table plano{
   valor_mensalidade double
 }
 
-table consulta{
-  id int [pk, increment]
-  associado_id int
-  disponibilidade_consulta_id int
-  situacao situacao_atendimento
-}
-
-table disponibilidade_consulta{
+table sgps.consulta{
   id int [pk, increment]
   prestador_id int
+  associado_id int
   hora_inicio datetime
   hora_fim datetime
-}
-
-table exame{
-  id int [pk, increment]
-  associado_id int
-  disponibilidade_exame_id int
   situacao situacao_atendimento
 }
 
-table disponibilidade_exame{
+table sgps.exame{
   id int [pk, increment]
   conveniado_id int
-  exame_id int
+  tipo_exame_id int
+  associado_id int
   hora_inicio datetime
   hora_fim datetime
+  situacao situacao_atendimento
 }
 
-table tipo_exame{
+table sgps.tipo_exame{
   id int [pk, increment]
   nome varchar
 }
 
-// Relacionamentos
-// n->n conveniado/exame
-// n->n conveniado/especialidade
-// n->n prestador/especialidade
-
 //Tabelas de suporte
 
-table endereco{
+table saf.endereco{
   id int [pk, increment]
   cep varchar
   logradouro varchar
@@ -105,15 +91,14 @@ table endereco{
   complemento varchar
 }
 
-table especialidade{
+table saf.especialidade{
   id int [pk, increment]
   nome varchar
 }
 
 
-
 // ENUMS
-enum estado_civil {
+enum saf.estado_civil {
   solteiro
   casado
   divorciado
@@ -121,18 +106,18 @@ enum estado_civil {
   uniao_estavel
 }
 
-enum sexo{
+enum saf.sexo{
   masculino
   feminino
 }
 
-enum situacao_associado{
+enum saf.situacao_associado{
   ativo
   suspenso
   inativo
 }
 
-enum uf{
+enum saf.uf{
   AC
   AL
   AP
@@ -162,22 +147,34 @@ enum uf{
   DF
 }
 
-enum categoria_plano{
+enum saf.categoria_plano{
   individual
   empresarial
 }
 
-enum tipo_plano{
+enum saf.tipo_plano{
   enfermaria
   apartamento
   vip
 }
 
-enum situacao_atendimento{
-  agendad
+enum sgps.situacao_atendimento{
+  aberto
+  agendado
   cancelado
   em_andamento
   finalizado
 }
 
-Ref: "especialidade"."id" < "prestador"."especialidade_id"
+Ref: saf.associado.endereco_id - saf.endereco.id
+Ref: saf.associado.plano_id > saf.plano.id
+Ref: saf.prestador.endereco_atendimento_id - saf.endereco.id
+Ref: saf.prestador.especialidade_id < saf.especialidade.id 
+Ref: saf.conveniado.endereco_id - saf.endereco.id
+
+Ref: sgps.exame.associado_id > saf.associado.id
+Ref: sgps.exame.conveniado_id > saf.conveniado.id
+Ref: sgps.exame.tipo_exame_id > sgps.tipo_exame.id
+
+Ref: sgps.consulta.associado_id > saf.associado.id
+Ref: sgps.consulta.prestador_id > saf.prestador.id
