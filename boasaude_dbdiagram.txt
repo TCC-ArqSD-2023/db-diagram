@@ -162,7 +162,7 @@ enum sgps.situacao_atendimento{
   aberto
   agendado
   cancelado
-  em_andamento
+  aguardando_autorizacao
   finalizado
 }
 
