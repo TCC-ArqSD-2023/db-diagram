@@ -169,7 +169,7 @@ enum sgps.situacao_atendimento{
 Ref: saf.associado.endereco_id - saf.endereco.id
 Ref: saf.associado.plano_id > saf.plano.id
 Ref: saf.prestador.endereco_atendimento_id - saf.endereco.id
-Ref: saf.prestador.especialidade_id < saf.especialidade.id 
+Ref: saf.prestador.especialidade_id > saf.especialidade.id 
 Ref: saf.conveniado.endereco_id - saf.endereco.id
 
 Ref: sgps.exame.associado_id > saf.associado.id
